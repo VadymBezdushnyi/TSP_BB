@@ -3,21 +3,10 @@
 <div class="columns-container">
     <div class="left column">
 		<div class="control" id="size-square">
-            <button class="white-button subcontrol" onclick="change_size(+1,+1)">+</button>
-            <div id="size" class="subcontrol">3x3</div>
             <button class="white-button subcontrol" onclick="change_size(-1,-1)">-</button>
-		</div>
-		<div class="control" id="size-rectangle">
-            <div class="control">Width</div>
-            <button class="white-button subcontrol" onclick="change_size(+1,0)">+</button>
-            <div id="size-width" class="subcontrol">3x3</div>
-            <button class="white-button subcontrol" onclick="change_size(-1,0)">-</button>
-
-            <div class="control">Height</div>
-            <button class="white-button subcontrol" onclick="change_size(0,+1)">+</button>
-            <div id="size-height" class="subcontrol">3x3</div>
-            <button class="white-button subcontrol" onclick="change_size(0,-1)">-</button>
-		</div>
+            <div id="size" class="subcontrol">3x3</div>
+            <button class="white-button subcontrol" onclick="change_size(+1,+1)">+</button>
+        </div>
 		<button class="white-button control" onclick="identity()">Identity</button>
         <button class="white-button control" onclick="fill(0)">Zeros</button>
         <button class="white-button control" onclick="fill(1)">Ones</button>
@@ -33,13 +22,5 @@
 		Input matrix:
 		<table id="input-matrix" class="matrix">
         </table>
-		<button class="white-button control2" onclick="copy_data()">Copy</button>
-		<button class="white-button control2" onclick="paste()">Paste</button>
 	</div>
-    <div class="right column" id="output">
-		Output matrix:
-		<table id="output-matrix" class="matrix">
-        </table>
-		<button class="white-button control" onclick="copy_result()">Copy</button>
-    </div>
 </div>

@@ -15,6 +15,8 @@ class Matrix:
         self.indices = [list(range(0, a.shape[0])), list(range(0, a.shape[0]))]
         self.min_cols = []
         self.min_rows = []
+    def __enter__(self):
+        return self
 
     def reduce_matrix(self):
         min_rows = self.m.min(axis=1)
@@ -85,10 +87,13 @@ class TSPNode:
     def calc_split_edge(self):
         # TODO: REFACTOR
         self.matrix.reduce_matrix()
-        ret2 = self.matrix.score_for_zeros()
+        zero_matrix = self.matrix.score_for_zeros()
 
-        res = np.unravel_index(ret2.argmax(), ret2.shape)
-        return [self.matrix.indices[x][res[x]] for x in range(2)]
+        indcs = self.matrix.indices
+        res = max( [(zero_matrix[i][j], indcs[0][i], indcs[1][j])
+                    for i, j in np.ndindex(self.matrix.m.shape) if indcs[0][i] != indcs[1][j]])
+        print("lasdasdasd",res,  res[1:])
+        return res[1:]
 
     def get_path(self):
         if self.is_final():
@@ -144,7 +149,7 @@ class TSPSolver:
                 path = node.get_path()
                 best_len = self.eval_path(best_path)
                 path_len = self.eval_path(path)
-                if best_len > path_len :
+                if best_len > path_len:
                     best_path = path
                     best_len = path_len
             else:
@@ -166,14 +171,14 @@ class TSPSolver:
 
 def run():
     a = np.array([[INF, 90, 80, 40, 100],
-                         [60, INF, 40, 50, 70],
-                         [50, 30, INF, 60, 20],
-                         [10, 70, 20, INF, 50],
-                         [20, 40, 50, 20, INF]])
+                  [60, INF, 40, 50, 70],
+                  [50, 30, INF, 60, 20],
+                  [10, 70, 20, INF, 50],
+                  [20, 40, 50, 20, INF]])
 
-    a = np.array([[INF, 5, 11, 9],
-                         [10, INF, 8, 7],
-                         [7, 14, INF, 8],
-                         [12, 6, 15, INF]])
+    a = np.array([[INF, 1, 1, 1],
+                  [1, INF, 1, 1],
+                  [1, 1, INF, 1],
+                  [1, 1, 1, INF]])
 
     TSPSolver(a).run()

@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import numpy as np
+import core
 from core import TSPSolver
 
 app = Flask(__name__)
@@ -10,14 +11,14 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/calculate_jordan')
+@app.route('/calculate')
 def calculate_jordan():
 
     print('lol')
     size = request.args.get('width', 1, type=int)
     matrix = np.array([request.args.getlist('matrix[{}][]'.format(i), ) for i in range(size)], dtype = np.dtype(int))
+    print('recieved', matrix)
     x = TSPSolver(matrix)
-    print('wtf')
     x.run()
 
     return jsonify(matrix=[[0] * size] * size, message="OK", ok=True)
