@@ -111,9 +111,9 @@ class TSPNode:
 
 class TSPSolver:
     def __init__(self, m):
-        self.m = m
+        self.m = Matrix(deepcopy(m))
         self.nodes_pool = None
-        self.start_matrix = deepcopy(m.m)
+        self.start_matrix = deepcopy(m)
 
     def eval_path(self, path):
         ans = 0
@@ -124,6 +124,7 @@ class TSPSolver:
         return ans
 
     def run(self):
+        print("miss you")
         self.nodes_pool = []
 
         main_node = TSPNode(self.m)
@@ -164,14 +165,15 @@ class TSPSolver:
 
 
 def run():
-    a = Matrix(np.array([[INF, 90, 80, 40, 100],
+    a = np.array([[INF, 90, 80, 40, 100],
                          [60, INF, 40, 50, 70],
                          [50, 30, INF, 60, 20],
                          [10, 70, 20, INF, 50],
-                         [20, 40, 50, 20, INF]]))
-    a = Matrix(np.array([[INF, 5, 11, 9],
+                         [20, 40, 50, 20, INF]])
+
+    a = np.array([[INF, 5, 11, 9],
                          [10, INF, 8, 7],
                          [7, 14, INF, 8],
-                         [12, 6, 15, INF]]))
+                         [12, 6, 15, INF]])
 
     TSPSolver(a).run()
