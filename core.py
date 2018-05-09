@@ -3,8 +3,8 @@ import math
 import numpy as np
 from copy import copy, deepcopy
 
-INF = 11111
-
+INF = 10000
+BOUND = 1000
 
 class Matrix:
     def __init__(self, a):
@@ -15,6 +15,7 @@ class Matrix:
         self.indices = [list(range(0, a.shape[0])), list(range(0, a.shape[0]))]
         self.min_cols = []
         self.min_rows = []
+
     def __enter__(self):
         return self
 
@@ -90,9 +91,10 @@ class TSPNode:
         zero_matrix = self.matrix.score_for_zeros()
 
         indcs = self.matrix.indices
-        res = max( [(zero_matrix[i][j], indcs[0][i], indcs[1][j])
-                    for i, j in np.ndindex(self.matrix.m.shape) if indcs[0][i] != indcs[1][j]])
-        print("lasdasdasd",res,  res[1:])
+        res = max([(zero_matrix[i][j], indcs[0][i], indcs[1][j])
+                   for i, j in np.ndindex(self.matrix.m.shape)
+                        if indcs[0][i] != indcs[1][j] and self.matrix.m[i][j] <= BOUND])
+        print("lasdasdasd", res, res[1:])
         return res[1:]
 
     def get_path(self):
@@ -176,9 +178,15 @@ def run():
                   [10, 70, 20, INF, 50],
                   [20, 40, 50, 20, INF]])
 
-    a = np.array([[INF, 1, 1, 1],
+    b = np.array([[INF, 1, 1, 1],
                   [1, INF, 1, 1],
                   [1, 1, INF, 1],
                   [1, 1, 1, INF]])
 
-    TSPSolver(a).run()
+    c = np.array([[10000, 0, 0, 0, 1, 0],
+                  [0, 10000, 1, 0, 0, 2],
+                  [0, 0, 10000, 1, 0, 0],
+                  [1, 0, 0, 10000, 2, 0],
+                  [0, 0, 0, 0, 10000, 1],
+                  [0, 0, 0, 0, 0, 10000], ])
+    TSPSolver(c).run()
