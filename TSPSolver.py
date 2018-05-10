@@ -11,7 +11,7 @@ from copy import copy, deepcopy
 
 INF = 10000
 BOUND = 1000
-MAXBB_ITERATIONS = 500
+MAXBB_ITERATIONS = 1500000
 
 
 class TSPSolver:
@@ -35,7 +35,6 @@ class TSPSolver:
         best_path = list(range(self.m.matrix.shape[0]))
 
         iteration = 0
-        time_entries = {}
         json_objects = {}
 
         heapq.heappush(self.nodes_pool, main_node)
@@ -62,12 +61,12 @@ class TSPSolver:
             else:
 
                 split_edge = node.calc_split_edge()
-                print(split_edge)
-                print(node.tsp_matrix.matrix)
-                print(node.tsp_matrix.indices)
-                print(node.tsp_matrix.paths_pool)
+                #print(split_edge)
+                #print(node.tsp_matrix.matrix)
+                #print(node.tsp_matrix.indices)
+                #print(node.tsp_matrix.paths_pool)
                 print(node.priority)
-                print("#" * 40)
+                #print("#" * 40)
 
                 InNode = deepcopy(node).include_node(split_edge)
                 InNode.index = 2 * node.index + 1
@@ -85,7 +84,8 @@ class TSPSolver:
                                          deleted=[node.index]))
 
                 iteration += 1
-        print(json_objects)
+        # print(json_objects)
+        print(iteration)
         print(best_path, self.eval_path(best_path))
         return dict(nodes=json_objects,
                     time_entries=time_entries,

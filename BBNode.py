@@ -7,7 +7,7 @@ import TSPMatrix
 from copy import copy, deepcopy
 
 INF = 1000000
-BOUND = 100000
+BOUND = 1000
 
 
 
@@ -19,8 +19,8 @@ class BBNode:
         self.priority = 0
 
     def __lt__(self, other):
-        return (self.priority/bin(self.index).count('1'), self.index) <\
-        (other.priority/ bin(other.index).count('1'), other.index)
+        return (self.priority / self.tsp_matrix.matrix.shape[0], self.index) <\
+        (other.priority / self.tsp_matrix.matrix.shape[0], other.index)
 
     def repr_json(self):
         return dict(tsp_matrix = self.tsp_matrix,
@@ -40,7 +40,6 @@ class BBNode:
         res = max([(self.tsp_matrix.zero_score[i][j], indcs[0][i], indcs[1][j])
                    for i, j in np.ndindex(self.tsp_matrix.matrix.shape)
                    if indcs[0][i] != indcs[1][j] and self.tsp_matrix.matrix[i][j] <= BOUND])
-        print("lasdasdasd", res, res[1:])
         return res[1:]
 
     def get_path(self):

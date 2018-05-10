@@ -1,9 +1,16 @@
 import numpy as np
 from TSPSolver import TSPSolver
 
-INF = 10000
-BOUND = 1000
-
+INF = 10000000
+BOUND = 10000000
+def readTest(input_file):
+    a = []
+    for line in input_file:
+        s = line.split()
+        a.append(s)
+    a = np.array(a, dtype=int)
+    np.fill_diagonal(a, INF)
+    return a
 
 def run():
     a = np.array([[INF, 90, 80, 40, 100],
@@ -23,4 +30,9 @@ def run():
                   [1, 0, 0, 10000, 2, 0],
                   [0, 0, 0, 0, 10000, 1],
                   [0, 0, 0, 0, 0, 10000], ])
-    TSPSolver(c).run()
+    with open('tests/42.txt') as f:
+        d = readTest(f)
+        print(d)
+
+
+    TSPSolver(d).run()

@@ -1,6 +1,6 @@
 var width = 3;
 var height = 3;
-var max_size = 30;
+var max_size = 10;
 var data = zero_matrix(max_size, max_size);
 var result = zero_matrix(max_size, max_size);
 
