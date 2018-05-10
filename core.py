@@ -1,53 +1,65 @@
 import heapq
 import math
 import numpy as np
+import json
+
 from copy import copy, deepcopy
 
 INF = 10000
 BOUND = 1000
 
 
-class Matrix:
-    def __init__(self, a):
-        self.init_size = a.shape[0]
-        self.m = a.copy()
+class TSPMatrix:
+    def __init__(self, input_matrix):
+        # TODO throw not square
+        self.init_size = input_matrix.shape[0]
+        self.matrix = input_matrix.copy()
+        self.zero_score = np.zeros(input_matrix.shape)
         self.paths_pool = []
         self.lower_bound = 0
-        self.indices = [list(range(0, a.shape[0])), list(range(0, a.shape[0]))]
+        self.indices = [list(range(0, input_matrix.shape[0])),
+                        list(range(0, input_matrix.shape[0]))]
         self.min_cols = []
         self.min_rows = []
 
     def __enter__(self):
         return self
 
+    def repr_json(self):
+        return dict(matrix=self.matrix.tolist(),
+                    zero_score=self.zero_scores,
+                    paths_pool=self.paths_pool,
+                    lower_bound=self.lower_bound,
+                    indices=self.indices,
+                    min_cols=self.min_cols,
+                    min_rows=self.min_rows
+                    )
+
     def reduce_matrix(self):
-        min_rows = self.m.min(axis=1)
+        min_rows = self.matrix.min(axis=1)
+        for i, j in np.ndindex(self.matrix.shape):
+            self.matrix[i][j] -= min_rows[i]
 
-        for i, j in np.ndindex(self.m.shape):
-            self.m[i][j] -= min_rows[i]
-
-        min_cols = self.m.min(axis=0)
-        for i, j in np.ndindex(self.m.shape):
-            self.m[i][j] -= min_cols[j]
+        min_cols = self.matrix.min(axis=0)
+        for i, j in np.ndindex(self.matrix.shape):
+            self.matrix[i][j] -= min_cols[j]
 
         self.lower_bound += np.sum(min_rows) + np.sum(min_cols)
         self.min_rows = min_rows
         self.min_cols = min_cols
 
-    def score_for_zeros(self):
-        zero_score = np.zeros(self.m.shape)
-        for i, j in np.ndindex(self.m.shape):
-            if self.m[i][j] == 0:
-                min_in_row = np.min(np.delete(self.m[i], j))
-                min_in_col = np.min(np.delete(self.m[:, j], i))
-                zero_score[i][j] = min_in_row + min_in_col
-
-        return zero_score
+    def calc_zero_score(self):
+        self.zero_score = np.zeros(self.matrix.shape)
+        for i, j in np.ndindex(self.matrix.shape):
+            if self.matrix[i][j] == 0:
+                min_in_row = np.min(np.delete(self.matrix[i], j))
+                min_in_col = np.min(np.delete(self.matrix[:, j], i))
+                self.zero_score[i][j] = min_in_row + min_in_col
 
     def include_edge(self, ind, jnd):
 
-        self.m = np.delete(self.m, self.indices[0].index(ind), 0)
-        self.m = np.delete(self.m, self.indices[1].index(jnd), 1)
+        self.matrix = np.delete(self.matrix, self.indices[0].index(ind), 0)
+        self.matrix = np.delete(self.matrix, self.indices[1].index(jnd), 1)
 
         self.indices[0].remove(ind)
         self.indices[1].remove(jnd)
@@ -69,17 +81,17 @@ class Matrix:
 
         start_of_new_path.extend(end_of_new_path)
         self.paths_pool.append(start_of_new_path[:])
-        if self.m.shape[0] > 2:
-            self.m[self.indices[0].index(start_of_new_path[-1])][self.indices[1].index(start_of_new_path[0])] = INF
+        if self.matrix.shape[0] > 2:
+            self.matrix[self.indices[0].index(start_of_new_path[-1])][self.indices[1].index(start_of_new_path[0])] = INF
 
-    def exlcude_edge(self, ind, jnd):
-        self.m[self.indices[0].index(ind)][self.indices[1].index(jnd)] = INF
+    def exclude_edge(self, ind, jnd):
+        self.matrix[self.indices[0].index(ind)][self.indices[1].index(jnd)] = INF
 
 
-class TSPNode:
+class BBNode:
 
-    def __init__(self, a, index):
-        self.matrix = a
+    def __init__(self, tsp_matrix, index):
+        self.tsp_matrix = tsp_matrix
         self.index = index
         self.priority = 0
 
@@ -88,44 +100,45 @@ class TSPNode:
             (self.priority < other.priority if not self.priority == other.priority
              else self.index < other.index)
 
+
     def is_final(self):
-        return len(self.matrix.paths_pool) == 1 and \
-               len(self.matrix.paths_pool[0]) == self.matrix.init_size
+        return len(self.tsp_matrix.paths_pool) == 1 and \
+               len(self.tsp_matrix.paths_pool[0]) == self.tsp_matrix.init_size
 
     def calc_split_edge(self):
-        # TODO: REFACTOR
-        self.matrix.reduce_matrix()
-        zero_matrix = self.matrix.score_for_zeros()
+        # TODO: remove to TSPMatrix
+        self.tsp_matrix.reduce_matrix()
+        self.tsp_matrix.calc_zero_score()
 
-        indcs = self.matrix.indices
-        res = max([(zero_matrix[i][j], indcs[0][i], indcs[1][j])
-                   for i, j in np.ndindex(self.matrix.m.shape)
-                   if indcs[0][i] != indcs[1][j] and self.matrix.m[i][j] <= BOUND])
+        indcs = self.tsp_matrix.indices
+        res = max([(self.tsp_matrix.zero_score[i][j], indcs[0][i], indcs[1][j])
+                   for i, j in np.ndindex(self.tsp_matrix.matrix.shape)
+                   if indcs[0][i] != indcs[1][j] and self.tsp_matrix.matrix[i][j] <= BOUND])
         print("lasdasdasd", res, res[1:])
         return res[1:]
 
     def get_path(self):
         if self.is_final():
-            return self.matrix.paths_pool[0]
+            return self.tsp_matrix.paths_pool[0]
 
     def include_node(self, split_edge):
-        self.matrix.include_edge(*split_edge)
-        self.matrix.reduce_matrix()
-        self.priority = self.matrix.lower_bound
+        self.tsp_matrix.include_edge(*split_edge)
+        self.tsp_matrix.reduce_matrix()
+        self.priority = self.tsp_matrix.lower_bound
         if self.priority == math.nan:
             self.priority = INF  # TODO
         return self
 
     def exclude_node(self, split_edge):
-        self.matrix.exlcude_edge(*split_edge)
-        self.matrix.reduce_matrix()
-        self.priority = self.matrix.lower_bound
+        self.tsp_matrix.exclude_edge(*split_edge)
+        self.tsp_matrix.reduce_matrix()
+        self.priority = self.tsp_matrix.lower_bound
         return self
 
 
 class TSPSolver:
     def __init__(self, m):
-        self.m = Matrix(deepcopy(m))
+        self.m = TSPMatrix(deepcopy(m))
         self.nodes_pool = None
         self.start_matrix = deepcopy(m)
 
@@ -140,10 +153,10 @@ class TSPSolver:
     def run(self):
         self.nodes_pool = []
 
-        main_node = TSPNode(self.m, 1)
+        main_node = BBNode(self.m, 1)
 
         best_len = INF * INF
-        best_path = list(range(self.m.m.shape[0]))
+        best_path = list(range(self.m.matrix.shape[0]))
 
         counter = 0
         heapq.heappush(self.nodes_pool, main_node)
@@ -163,7 +176,8 @@ class TSPSolver:
             else:
 
                 split_edge = node.calc_split_edge()
-                print(split_edge, node.matrix.m, node.matrix.indices, node.matrix.paths_pool, node.priority, sep="\n")
+                print(split_edge, node.tsp_matrix.matrix, node.tsp_matrix.indices,
+                      node.tsp_matrix.paths_pool, node.priority, sep="\n")
                 print("#" * 40)
 
                 InNode = deepcopy(node).include_node(split_edge)
