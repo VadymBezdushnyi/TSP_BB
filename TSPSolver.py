@@ -3,6 +3,7 @@ import math
 import numpy as np
 import json
 
+from ComplexEncoder import ComplexEncoder
 from TSPMatrix import TSPMatrix
 from BBNode import BBNode
 
@@ -20,9 +21,7 @@ class TSPSolver:
 
     def eval_path(self, path):
         ans = 0
-        # print(path)
         for i, _ in enumerate(path):
-            # print(self.start_matrix[path[i - 1]][path[i]])
             ans += self.start_matrix[path[i - 1]][path[i]]
         return ans
 
@@ -69,10 +68,3 @@ class TSPSolver:
                 counter += 1
 
         print(best_path, self.eval_path(best_path))
-
-class ComplexEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if hasattr(obj,'repr_json'):
-            return obj.repr_json()
-        else:
-            return json.JSONEncoder.default(self, obj)

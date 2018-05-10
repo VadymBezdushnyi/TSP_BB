@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import numpy as np
-import TSPSolver
+from TSPSolver import TSPSolver
 import TestRunner
 app = Flask(__name__)
 
