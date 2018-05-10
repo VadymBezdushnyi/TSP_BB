@@ -6,8 +6,8 @@ import TSPMatrix
 
 from copy import copy, deepcopy
 
-INF = 10000
-BOUND = 1000
+INF = 1000000
+BOUND = 100000
 
 
 
@@ -19,9 +19,8 @@ class BBNode:
         self.priority = 0
 
     def __lt__(self, other):
-        return \
-            (self.priority < other.priority if not self.priority == other.priority
-             else self.index > other.index)
+        return (self.priority/bin(self.index).count('1'), self.index) <\
+        (other.priority/ bin(other.index).count('1'), other.index)
 
     def repr_json(self):
         return dict(tsp_matrix = self.tsp_matrix,

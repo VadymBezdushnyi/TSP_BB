@@ -1,6 +1,6 @@
 var width = 3;
 var height = 3;
-var max_size = 9;
+var max_size = 30;
 var data = zero_matrix(max_size, max_size);
 var result = zero_matrix(max_size, max_size);
 
@@ -50,7 +50,7 @@ function getId(i, j) {
 function random() {
     for (var i = 0; i < max_size; i++) {
         for (var j = 0; j < max_size; j++) {
-            data[i][j] = Math.floor((Math.random() * 10) - 5);
+            data[i][j] = Math.floor((Math.random() * 400) + 5);
         }
     }
     rebuild_matrix();
@@ -123,7 +123,7 @@ function set_status(ok) {
 function sample1() {
     set_size(4, 4);
     fill(0);
-    var INF = 1000;
+    var INF = 100000;
     x = [[INF, 5, 11, 9], [10, INF, 8, 7], [7, 14, INF, 8], [12, 6, 15, INF]];
     for (var i = 0; i < height; i++)
         for (var j = 0; j < width; j++)

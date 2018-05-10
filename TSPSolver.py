@@ -70,11 +70,11 @@ class TSPSolver:
                 print("#" * 40)
 
                 InNode = deepcopy(node).include_node(split_edge)
-                InNode.index = 2 * node.index
+                InNode.index = 2 * node.index + 1
                 json_objects[InNode.index] = InNode
 
                 ExNode = deepcopy(node).exclude_node(split_edge)
-                ExNode.index = 2 * node.index + 1
+                ExNode.index = 2 * node.index
                 json_objects[ExNode.index] = ExNode
 
                 heapq.heappush(self.nodes_pool, InNode)
@@ -86,8 +86,8 @@ class TSPSolver:
 
                 iteration += 1
         print(json_objects)
+        print(best_path, self.eval_path(best_path))
         return dict(nodes=json_objects,
                     time_entries=time_entries,
                     order=order,
                     best_path=best_path)
-        # print(best_path, self.eval_path(best_path))
