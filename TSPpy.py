@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import numpy as np
-import core
-from core import TSPSolver
-
+import TSPSolver
+import TestRunner
 app = Flask(__name__)
 
 
@@ -26,4 +25,4 @@ def calculate():
 
 
 if __name__ == '__main__':
-    core.run()
+    TestRunner.run()
