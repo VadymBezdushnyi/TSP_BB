@@ -6,6 +6,7 @@ from copy import copy, deepcopy
 INF = 10000
 BOUND = 1000
 
+
 class Matrix:
     def __init__(self, a):
         self.init_size = a.shape[0]
@@ -77,9 +78,15 @@ class Matrix:
 
 class TSPNode:
 
-    def __init__(self, a):
+    def __init__(self, a, index):
         self.matrix = a
+        self.index = index
         self.priority = 0
+
+    def __lt__(self, other):
+        return \
+            (self.priority < other.priority if not self.priority == other.priority
+             else self.index < other.index)
 
     def is_final(self):
         return len(self.matrix.paths_pool) == 1 and \
@@ -93,7 +100,7 @@ class TSPNode:
         indcs = self.matrix.indices
         res = max([(zero_matrix[i][j], indcs[0][i], indcs[1][j])
                    for i, j in np.ndindex(self.matrix.m.shape)
-                        if indcs[0][i] != indcs[1][j] and self.matrix.m[i][j] <= BOUND])
+                   if indcs[0][i] != indcs[1][j] and self.matrix.m[i][j] <= BOUND])
         print("lasdasdasd", res, res[1:])
         return res[1:]
 
@@ -131,20 +138,19 @@ class TSPSolver:
         return ans
 
     def run(self):
-        print("miss you")
         self.nodes_pool = []
 
-        main_node = TSPNode(self.m)
+        main_node = TSPNode(self.m, 1)
 
         best_len = INF * INF
         best_path = list(range(self.m.m.shape[0]))
 
         counter = 0
-        heapq.heappush(self.nodes_pool, [1, counter, main_node])
+        heapq.heappush(self.nodes_pool, main_node)
         while len(self.nodes_pool) > 0 and counter <= 50:
 
-            priority, _, node = heapq.heappop(self.nodes_pool)
-            if priority > best_len:
+            node = heapq.heappop(self.nodes_pool)
+            if node.priority > best_len:
                 break
 
             if node.is_final():
@@ -157,14 +163,17 @@ class TSPSolver:
             else:
 
                 split_edge = node.calc_split_edge()
-                print(split_edge, node.matrix.m, node.matrix.indices, node.matrix.paths_pool, priority, sep="\n")
+                print(split_edge, node.matrix.m, node.matrix.indices, node.matrix.paths_pool, node.priority, sep="\n")
                 print("#" * 40)
 
                 InNode = deepcopy(node).include_node(split_edge)
-                ExNode = deepcopy(node).exclude_node(split_edge)
+                InNode.index = 2 * node.index
 
-                heapq.heappush(self.nodes_pool, [InNode.priority, 2 * counter, InNode])
-                heapq.heappush(self.nodes_pool, [ExNode.priority, 2 * counter + 1, ExNode])
+                ExNode = deepcopy(node).exclude_node(split_edge)
+                ExNode.index = 2 * node.index + 1
+
+                heapq.heappush(self.nodes_pool, InNode)
+                heapq.heappush(self.nodes_pool, ExNode)
 
                 counter += 1
 
@@ -189,4 +198,4 @@ def run():
                   [1, 0, 0, 10000, 2, 0],
                   [0, 0, 0, 0, 10000, 1],
                   [0, 0, 0, 0, 0, 10000], ])
-    TSPSolver(c).run()
+    TSPSolver(b).run()
