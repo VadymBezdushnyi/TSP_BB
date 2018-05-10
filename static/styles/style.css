@@ -125,7 +125,7 @@ input.matrix-cell {
 
 .column {
     width: 50%;
-    float:left;
+    float:bottom;
     position:relative;
 }
 
@@ -250,22 +250,25 @@ input.matrix-cell {
 }
 
 .columns-container {
+    height: 500px;
 	width: 100%;
 }
 
 .column {
-	float:left;
+	float:bottom;
 	height: 100%;
 	text-align: center;
 	font-weight: bold;
 }
 
 .left {
+    float:left;
 	width: 10%;
 	//border-right: 1px solid #d5dddf;
 }
 
 .middle {
+    float:left;
 	width: 45%;
 	//border-right: 1px solid #d5dddf;
 }
@@ -291,4 +294,38 @@ input.matrix-cell {
 
 .active:hover, .active:active {
 	background-color: #FFF !important;
+}
+
+.visualizer {
+    float:bottom;
+}
+
+
+#mynetwork {
+    float: bottom;
+    position: relative;
+    width: 800px;
+    height: 600px;
+    border: 1px solid lightgray;
+}
+
+
+#operation {
+    font-size: 28px;
+}
+
+#network-popUp {
+    display: none;
+    position: absolute;
+    top: 350px;
+    left: 170px;
+    z-index: 299;
+    width: 250px;
+    height: 120px;
+    background-color: #f9f9f9;
+    border-style: solid;
+    border-width: 3px;
+    border-color: #5394ed;
+    padding: 10px;
+    text-align: center;
 }

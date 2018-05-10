@@ -21,7 +21,7 @@ class BBNode:
     def __lt__(self, other):
         return \
             (self.priority < other.priority if not self.priority == other.priority
-             else self.index < other.index)
+             else self.index > other.index)
 
     def repr_json(self):
         return dict(tsp_matrix = self.tsp_matrix,

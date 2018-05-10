@@ -27,9 +27,9 @@ class TSPMatrix:
         return self
 
     def repr_json(self):
-        return dict(init_matrix=self.init_matrix.tolist(),
-                    matrix=self.matrix.tolist(),
-                    zero_score=self.zero_score.tolist(),
+        return dict(init_matrix=self.init_matrix,
+                    matrix=self.matrix,
+                    zero_score=self.zero_score,
                     paths_pool=self.paths_pool,
                     lower_bound=self.lower_bound,
                     indices=self.indices,

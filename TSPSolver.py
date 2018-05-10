@@ -11,6 +11,7 @@ from copy import copy, deepcopy
 
 INF = 10000
 BOUND = 1000
+MAXBB_ITERATIONS = 500
 
 
 class TSPSolver:
@@ -29,20 +30,29 @@ class TSPSolver:
         self.nodes_pool = []
 
         main_node = BBNode(self.m, 1)
-        print(json.dumps(main_node.repr_json(), cls=ComplexEncoder))
 
-        best_len = INF * INF
+        best_len = INF * INF  # TODO
         best_path = list(range(self.m.matrix.shape[0]))
 
-        counter = 0
+        iteration = 0
+        time_entries = {}
+        json_objects = {}
+
         heapq.heappush(self.nodes_pool, main_node)
-        while len(self.nodes_pool) > 0 and counter <= 50:
+        json_objects[1] = main_node
+        time_entries = [dict(created=[1], final=[], deleted=[])]
+        order = []
+        while len(self.nodes_pool) > 0 and iteration < MAXBB_ITERATIONS:
 
             node = heapq.heappop(self.nodes_pool)
-            if node.priority > best_len:
+            order.append(node.index)
+            if node.priority >= best_len:
                 break
 
             if node.is_final():
+                time_entries.append(dict(created=[],
+                                         final=[node.index],
+                                         deleted=[node.index]))
                 path = node.get_path()
                 best_len = self.eval_path(best_path)
                 path_len = self.eval_path(path)
@@ -52,19 +62,32 @@ class TSPSolver:
             else:
 
                 split_edge = node.calc_split_edge()
-                print(split_edge, node.tsp_matrix.matrix, node.tsp_matrix.indices,
-                      node.tsp_matrix.paths_pool, node.priority, sep = '\n')
+                print(split_edge)
+                print(node.tsp_matrix.matrix)
+                print(node.tsp_matrix.indices)
+                print(node.tsp_matrix.paths_pool)
+                print(node.priority)
                 print("#" * 40)
 
                 InNode = deepcopy(node).include_node(split_edge)
                 InNode.index = 2 * node.index
+                json_objects[InNode.index] = InNode
 
                 ExNode = deepcopy(node).exclude_node(split_edge)
                 ExNode.index = 2 * node.index + 1
+                json_objects[ExNode.index] = ExNode
 
                 heapq.heappush(self.nodes_pool, InNode)
                 heapq.heappush(self.nodes_pool, ExNode)
 
-                counter += 1
+                time_entries.append(dict(created=[InNode.index, ExNode.index],
+                                         final=[],
+                                         deleted=[node.index]))
 
-        print(best_path, self.eval_path(best_path))
+                iteration += 1
+        print(json_objects)
+        return dict(nodes=json_objects,
+                    time_entries=time_entries,
+                    order=order,
+                    best_path=best_path)
+        # print(best_path, self.eval_path(best_path))

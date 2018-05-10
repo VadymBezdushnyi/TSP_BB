@@ -4,17 +4,16 @@ var max_size = 9;
 var data = zero_matrix(max_size, max_size);
 var result = zero_matrix(max_size, max_size);
 
-var calculator = '';
-var output_type = 'matrix-square';
 
 var color_main_1 = '#FFFFFF';
 var color_main_2 = '#F9F9F9';
 var color_disabled = '#EEEEEE';
 var color_special = '#BBFF99';
 
+
 var colorizer = function (i, j) {
     return (i < height && j < width ? ((i + j) % 2 == 0 ? color_main_1 : color_main_2) : color_disabled);
-}
+};
 
 function zero_matrix(width, height) {
     var data = [], row = [];
@@ -24,7 +23,7 @@ function zero_matrix(width, height) {
 }
 
 window.onload = function () {
-    select_calculator(calculator, output_type);
+    init();
     set_size(3, 3);
 }
 
@@ -72,18 +71,18 @@ function enabled(i, j) {
 function rebuild_matrix() {
     $("#message").empty();
     var content = ''
-    if (calculator == 'gauss') content += variables_row();
     for (var i = 0; i < max_size; i++) {
         content += '<tr>';
         for (var j = 0; j < max_size; j++) {
             content += '<td>';
             content += '<input style="background-color:' + colorizer(i, j) +
                 '" class="matrix-cell" id="' + getId(i, j) + '" value="' +
-                (enabled(i, j) ? data[i][j] : ((i===j)? "&infin;" : 0)) + '" ' + (enabled(i, j) ? '' : 'disabled') + '/>';
+                (enabled(i, j) ? data[i][j] : ((i === j) ? "&infin;" : 0)) + '" ' + (enabled(i, j) ? '' : 'disabled') + '/>';
             content += '</td>';
         }
         content += '</tr>';
     }
+
     $('#input-matrix').empty().append(content);
     $("#input-matrix").on('mouseup', '.matrix-cell', function () {
         $(this).select();
@@ -98,7 +97,6 @@ function rebuild_matrix() {
 function set_matrix(id, data) {
     result = data;
     var content = '';
-    if (calculator == 'gauss') content += variables_row();
     for (var i = 0; i < max_size; i++) {
         content += '<tr>';
         for (var j = 0; j < max_size; j++) {
@@ -125,7 +123,7 @@ function set_status(ok) {
 function sample1() {
     set_size(4, 4);
     fill(0);
-    var INF = 1000
+    var INF = 1000;
     x = [[INF, 5, 11, 9], [10, INF, 8, 7], [7, 14, INF, 8], [12, 6, 15, INF]];
     for (var i = 0; i < height; i++)
         for (var j = 0; j < width; j++)
@@ -158,7 +156,7 @@ function calculate() {
         "width": width,
         "height": height
     }, function (data) {
-
+        visualize(data.result);
         $("#message").empty().append(data.message);
         set_status(data.ok);
     });
@@ -166,14 +164,4 @@ function calculate() {
 
 function first_letter_color(text, color) {
     return '<span class="first-char">' + text[0] + '</span>' + text.slice(1);
-}
-
-
-function select_calculator() {
-
-    colorizer = function (i, j) {
-        return (i < height && j < width ? ((i + j) % 2 === 0 ? color_main_1 : color_main_2) : color_disabled);
-    }
-
-    set_size(width, height);
 }
