@@ -51,7 +51,7 @@ class TSPSolver:
             if node.is_final():
                 time_entries.append(dict(created=[],
                                          final=[node.index],
-                                         deleted=[node.index]))
+                                         deleted=[]))
                 path = node.get_path()
                 best_len = self.eval_path(best_path)
                 path_len = self.eval_path(path)

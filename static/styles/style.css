@@ -304,7 +304,7 @@ input.matrix-cell {
 #mynetwork {
     float: bottom;
     position: relative;
-    width: 800px;
+    width: 1000px;
     height: 600px;
     border: 1px solid lightgray;
 }
@@ -320,12 +320,24 @@ input.matrix-cell {
     top: 350px;
     left: 170px;
     z-index: 299;
-    width: 250px;
-    height: 120px;
+    /*width: 250px;*/
+    /*height: 120px;*/
     background-color: #f9f9f9;
     border-style: solid;
     border-width: 3px;
     border-color: #5394ed;
     padding: 10px;
     text-align: center;
+}
+
+
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.6;
+}
+
+.nodes circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
 }
