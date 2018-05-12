@@ -19,8 +19,8 @@ class BBNode:
         self.priority = 0
 
     def __lt__(self, other):
-        return (self.priority / self.tsp_matrix.matrix.shape[0], self.index) <\
-        (other.priority / self.tsp_matrix.matrix.shape[0], other.index)
+        return (self.priority / self.tsp_matrix.matrix.shape[0], -self.index) <\
+        (other.priority / self.tsp_matrix.matrix.shape[0], -other.index)
 
     def repr_json(self):
         return dict(tsp_matrix = self.tsp_matrix,

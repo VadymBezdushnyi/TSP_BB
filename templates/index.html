@@ -1,28 +1,55 @@
 <html>
-    <head>
-        <meta charset="utf-8"/>
-        <title>TSP</title>
-        <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/x-icon"/>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/vis.min.css') }}">
-        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>-->
-        <script type="text/javascript" src="{{ url_for('static',filename='js/jquery.js') }}"></script>
-        <script type="text/javascript" src="{{ url_for('static',filename='js/vis.min.js') }}"></script>
-        <script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
-        <script type="text/javascript" src="{{ url_for('static',filename='js/datavis.js') }}"></script>
-
+<head>
+    <meta charset="utf-8"/>
+    <title>TSP</title>
+    <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/x-icon"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/vis.min.css') }}">
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>-->
+    <script type="text/javascript" src="{{ url_for('static',filename='js/jquery.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/vis.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/datavis.js') }}"></script>
 
 
 </head>
 <body>
 </body>
 </html>
-    </head>
-    <body>
-        <div id="content">
-            {% include 'calculator.html' %}
-            {% include 'visualizer.html' %}
-            {% include 'footer.html' %}
+</head>
+<body>
+<div id="content">
+    <div class="header" id="calculator-name"><span class="first-char">I</span>nverse matrix calculator</div>
+
+    <div class="columns-container">
+        <div class="left column">
+            <div class="control" id="size-square">
+                <button class="white-button subcontrol" onclick="change_size(-1,-1)">-</button>
+                <div id="size" class="subcontrol">3x3</div>
+                <button class="white-button subcontrol" onclick="change_size(+1,+1)">+</button>
+            </div>
+            <button class="white-button control" onclick="fill(0)">Zeros</button>
+            <button class="white-button control" onclick="fill(1)">Ones</button>
+            <button class="white-button control" onclick="sample1()">Sample #1</button>
+            <button class="white-button control" onclick="sample2()">Sample #2</button>
+            <button class="white-button control" onclick="random()">Random</button>
+            <button class="red-button control" onclick="calculate('/calculate_inverse')">Calculate</button>
+            <div class="controls">
+                <div id="message" class="control"></div>
+            </div>
         </div>
-    </body>
+        <div class="middle column" id="input">
+            Input matrix:
+            <table id="input-matrix" class="matrix">
+            </table>
+        </div>
+        <div class="right column" id="drawgraph"></div>
+    </div>
+    <div class="visualizer">
+        <div id="mynetwork"></div>
+    </div>
+
+
+</div>
+</body>
 </html>

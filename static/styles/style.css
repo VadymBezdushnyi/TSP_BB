@@ -297,15 +297,22 @@ input.matrix-cell {
 }
 
 .visualizer {
-    float:bottom;
+	width: auto;
 }
 
 
 #mynetwork {
-    float: bottom;
+    float: left;
     position: relative;
     width: 1000px;
     height: 600px;
+    border: 1px solid lightgray;
+}
+#drawgraph {
+    float: left;
+    position: relative;
+    width: 400px;
+    height: 400px;
     border: 1px solid lightgray;
 }
 
