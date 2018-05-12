@@ -55,16 +55,18 @@ class TSPSolver:
                 path = node.get_path()
                 best_len = self.eval_path(best_path)
                 path_len = self.eval_path(path)
+                node.tsp_matrix.paths_pool[0].append(node.tsp_matrix.paths_pool[0][0]) # TODO
                 if best_len > path_len:
                     best_path = path
                     best_len = path_len
             else:
 
                 split_edge = node.calc_split_edge()
-                #print(split_edge)
-                #print(node.tsp_matrix.matrix)
-                #print(node.tsp_matrix.indices)
-                #print(node.tsp_matrix.paths_pool)
+
+                print(split_edge)
+                print(node.tsp_matrix.matrix)
+                print(node.tsp_matrix.indices)
+                print(node.tsp_matrix.paths_pool)
                 print(node.priority)
                 #print("#" * 40)
 

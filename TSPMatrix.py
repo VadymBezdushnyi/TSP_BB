@@ -83,7 +83,7 @@ class TSPMatrix:
 
         start_of_new_path.extend(end_of_new_path)
         self.paths_pool.append(start_of_new_path[:])
-        if self.matrix.shape[0] > 2:
+        if self.matrix.shape[0] > 1:
             self.matrix[self.indices[0].index(start_of_new_path[-1])][self.indices[1].index(start_of_new_path[0])] = INF
 
     def exclude_edge(self, ind, jnd):

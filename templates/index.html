@@ -10,19 +10,12 @@
     <script type="text/javascript" src="{{ url_for('static',filename='js/vis.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static',filename='js/datavis.js') }}"></script>
-
-
 </head>
 <body>
-</body>
-</html>
-</head>
-<body>
-<div id="content">
-    <div class="header" id="calculator-name"><span class="first-char">I</span>nverse matrix calculator</div>
-
-    <div class="columns-container">
-        <div class="left column">
+<div id="container">
+    <div id="content">
+        <div class="header" id="calculator-name">Travelling salesman problem</div>
+        <div class="rowbutton">
             <div class="control" id="size-square">
                 <button class="white-button subcontrol" onclick="change_size(-1,-1)">-</button>
                 <div id="size" class="subcontrol">3x3</div>
@@ -34,22 +27,25 @@
             <button class="white-button control" onclick="sample2()">Sample #2</button>
             <button class="white-button control" onclick="random()">Random</button>
             <button class="red-button control" onclick="calculate('/calculate_inverse')">Calculate</button>
-            <div class="controls">
-                <div id="message" class="control"></div>
+        </div>
+
+        <div class="columns-container">
+            <div class="left column" id="input">
+                <table id="input-matrix" class="matrix">
+                </table>
+            </div>
+            <div class="right column">
+                <div id="drawgraph">
+
+                </div>
             </div>
         </div>
-        <div class="middle column" id="input">
-            Input matrix:
-            <table id="input-matrix" class="matrix">
-            </table>
+        <div class="visualizer">
+            <div id="mynetwork"></div>
         </div>
-        <div class="right column" id="drawgraph"></div>
-    </div>
-    <div class="visualizer">
-        <div id="mynetwork"></div>
-    </div>
 
 
+    </div>
 </div>
 </body>
 </html>

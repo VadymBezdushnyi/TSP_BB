@@ -1,9 +1,10 @@
 var width = 3;
 var height = 3;
-var max_size = 10;
+var max_size = 15;
 var data = zero_matrix(max_size, max_size);
 var result;
-
+var finalNode = 0;
+var INF = 100000;
 
 var color_main_1 = '#FFFFFF';
 var color_main_2 = '#F9F9F9';
@@ -122,7 +123,7 @@ function set_status(ok) {
 function sample1() {
     set_size(4, 4);
     fill(0);
-    var INF = 100000;
+
     x = [[INF, 5, 11, 9], [10, INF, 8, 7], [7, 14, INF, 8], [12, 6, 15, INF]];
     for (var i = 0; i < height; i++)
         for (var j = 0; j < width; j++)
@@ -131,9 +132,19 @@ function sample1() {
 }
 
 function sample2() {
-    set_size(6, 6);
+    set_size(11, 11);
     fill(0);
-    x = [[-2, 0, 0, 0, 1, 0], [0, 2, 1, 0, 0, 2], [0, 0, 2, 1, 0, 0], [1, 0, 0, 2, 2, 0], [0, 0, 0, 0, -3, 1], [0, 0, 0, 0, 0, -3]];
+    x = [[0,327,353,144,217,452,333,318,304,149,280],
+[327,0,243,183,376,174,90,158,403,251,56],
+[353,243,0,263,245,190,155,85,217,205,206],
+[144,183,263,0,250,318,199,203,311,118,138],
+[217,376,245,250,0,417,327,268,90,134,320],
+[452,174,190,318,417,0,119,150,405,330,187],
+[333,90,155,199,327,119,0,74,337,221,74],
+[318,158,85,203,268,150,74,0,267,183,122],
+[304,403,217,311,90,405,337,267,0,194,349],
+[149,251,205,118,134,330,221,183,194,0,195],
+[280,56,206,138,320,187,74,122,349,195,0]];
     for (var i = 0; i < height; i++)
         for (var j = 0; j < width; j++)
             data[i][j] = x[i][j];
@@ -146,7 +157,7 @@ function calculate() {
     var subdata = []
     for (var i = 0; i < height; i++)
         subdata.push(data[i].slice(0, width));
-    var INF = 1000
+
     for (var i = 0; i < height; i++)
         subdata[i][i] = INF
 
@@ -156,6 +167,7 @@ function calculate() {
         "height": height
     }, function (data) {
         result = data.result;
+        $("#message").empty().append("Visualization...");
         console.log("result");
         console.log(result);
         visualizeVisjs(data.result);
@@ -254,7 +266,24 @@ var tree_options = {
     }
 }
 
+function set_graph_edges(id) {
+    graph_edges.clear()
+    var path_pool = result.nodes[id].tsp_matrix.paths_pool
+    console.log(path_pool)
+    path_pool.forEach(function (path) {
+        for (var i = 0; i + 1 < path.length; i++) {
+            graph_edges.add({
+                id: path[i],
+                from: path[i],
+                to: path[i + 1],
+                label: result.nodes[1].tsp_matrix.init_matrix[path[i]][path[i + 1]].toString()
+            });
+        }
+    });
+}
+
 function draw() {
+    destroy();
     // create an array with tree_nodes
     tree_nodes = new vis.DataSet();
 
@@ -275,19 +304,7 @@ function draw() {
         var clickedNode = tree_nodes.get(ids)[0];
         console.log(result.nodes[3])
         if (clickedNode !== undefined) {
-            graph_edges.clear()
-            console.log('clicked tree_nodes:', clickedNode);
-            var path_pool = result.nodes[clickedNode.id].tsp_matrix.paths_pool
-            console.log(path_pool)
-            path_pool.forEach(function (path) {
-                for (var i = 0; i < path.length - 1; i++) {
-                    graph_edges.add({
-                        id: path[i],
-                        from: path[i],
-                        to: path[i + 1]
-                    });
-                }
-            });
+            set_graph_edges(clickedNode.id)
         }
     });
 
@@ -314,6 +331,8 @@ function animate(res) {
     MAX_TIME = 5000;
     console.log("start animation");
     node_cnt = res.time_entries.length;
+    console.log(finalNode)
+    set_graph_edges(finalNode)
     for (var i = 0; i < node_cnt; i++) {
         var obj = (res.time_entries[i]);
         // console.log(obj);
@@ -335,20 +354,19 @@ function animate(res) {
                     label: timeEl.toString(),
                     color: (timeEl % 2 === 1 ? '#559988' : '#995522')
                 });
-                console.log("animation: " + timeit)
+                // console.log("animation: " + timeit)
             });
 
             obj.final.forEach(function (timeEl) {
-
+                finalNode = timeEl
                 tree_nodes.update({
                     id: timeEl,
                     label: timeEl.toString(),
                     color: '#00FF00'
                 });
-                console.log("animation: " + timeit)
-
-
+                // console.log("animation: " + timeit)
             });
+
 
         }, timeit, obj);
     }
@@ -364,7 +382,7 @@ function visualizeVisjs(res) {
 
     var graph_new_nodes = []
     console.log(res.order)
-    for (var i = 0; i < res.best_path.length; i++) {
+    for (var i = 0; i < res.best_path.length - 1; i++) {
         graph_new_nodes.push({
             id: i,
             label: (i + 1).toString()
@@ -390,11 +408,14 @@ function visualizeVisjs(res) {
                 });
             }
         });
+        obj.final.forEach(function (timeEl) {
+            finalNode = timeEl;
+        });
     }
     tree_nodes.add(tree_new_nodes);
     tree_edges.add(tree_new_edges);
     console.log(tree_edges);
-
+    tree_network.fit()
     console.log("end");
     animate(res);
 }
