@@ -134,17 +134,17 @@ function sample1() {
 function sample2() {
     set_size(11, 11);
     fill(0);
-    x = [[0,327,353,144,217,452,333,318,304,149,280],
-[327,0,243,183,376,174,90,158,403,251,56],
-[353,243,0,263,245,190,155,85,217,205,206],
-[144,183,263,0,250,318,199,203,311,118,138],
-[217,376,245,250,0,417,327,268,90,134,320],
-[452,174,190,318,417,0,119,150,405,330,187],
-[333,90,155,199,327,119,0,74,337,221,74],
-[318,158,85,203,268,150,74,0,267,183,122],
-[304,403,217,311,90,405,337,267,0,194,349],
-[149,251,205,118,134,330,221,183,194,0,195],
-[280,56,206,138,320,187,74,122,349,195,0]];
+    x = [[0, 327, 353, 144, 217, 452, 333, 318, 304, 149, 280],
+        [327, 0, 243, 183, 376, 174, 90, 158, 403, 251, 56],
+        [353, 243, 0, 263, 245, 190, 155, 85, 217, 205, 206],
+        [144, 183, 263, 0, 250, 318, 199, 203, 311, 118, 138],
+        [217, 376, 245, 250, 0, 417, 327, 268, 90, 134, 320],
+        [452, 174, 190, 318, 417, 0, 119, 150, 405, 330, 187],
+        [333, 90, 155, 199, 327, 119, 0, 74, 337, 221, 74],
+        [318, 158, 85, 203, 268, 150, 74, 0, 267, 183, 122],
+        [304, 403, 217, 311, 90, 405, 337, 267, 0, 194, 349],
+        [149, 251, 205, 118, 134, 330, 221, 183, 194, 0, 195],
+        [280, 56, 206, 138, 320, 187, 74, 122, 349, 195, 0]];
     for (var i = 0; i < height; i++)
         for (var j = 0; j < width; j++)
             data[i][j] = x[i][j];
@@ -249,6 +249,12 @@ function destroy() {
 }
 
 var tree_options = {
+    nodes: {
+        shape: 'circle'
+    },
+    edges: {
+        smooth: false
+    },
     layout: {
         randomSeed: undefined,
         improvedLayout: true,
@@ -268,17 +274,26 @@ var tree_options = {
 
 function set_graph_edges(id) {
     graph_edges.clear()
+
     var path_pool = result.nodes[id].tsp_matrix.paths_pool
-    console.log(path_pool)
+    console.log("path_pool", path_pool)
+    var pathLen = 0;
     path_pool.forEach(function (path) {
         for (var i = 0; i + 1 < path.length; i++) {
+            console.log(path[i]);
+            var edge_len = result.nodes[1].tsp_matrix.init_matrix[path[i]][path[i + 1]]
             graph_edges.add({
                 id: path[i],
                 from: path[i],
                 to: path[i + 1],
-                label: result.nodes[1].tsp_matrix.init_matrix[path[i]][path[i + 1]].toString()
+                label: edge_len.toString()
             });
+            pathLen += edge_len;
         }
+
+        infoContainer = document.getElementById('info');
+        infoContainer.innerHTML = 'Lower_bound: ' + '<b>' + result.nodes[id].tsp_matrix.lower_bound + '</b>' + '<br>';
+        infoContainer.innerHTML += '<b>' + 'Path length:' + '</b>' + pathLen;
     });
 }
 
@@ -321,6 +336,9 @@ function draw() {
     var graph_options = {
         nodes: {
             shape: 'circle'
+        },
+        edges: {
+            smooth: false
         }
     };
     graph_network = new vis.Network(graph_container, graph_data, graph_options);
@@ -382,13 +400,6 @@ function visualizeVisjs(res) {
 
     var graph_new_nodes = []
     console.log(res.order)
-    for (var i = 0; i < res.best_path.length - 1; i++) {
-        graph_new_nodes.push({
-            id: i,
-            label: (i + 1).toString()
-        });
-    }
-    graph_nodes.add(graph_new_nodes);
 
     for (var i = 0; i < res.time_entries.length; i++) {
         var obj = res.time_entries[i];
@@ -416,6 +427,15 @@ function visualizeVisjs(res) {
     tree_edges.add(tree_new_edges);
     console.log(tree_edges);
     tree_network.fit()
+
+    for (var i = 0; i < result.nodes[finalNode].tsp_matrix.paths_pool[0].length - 1; i++) {
+        graph_new_nodes.push({
+            id: i,
+            label: (i + 1).toString()
+        });
+    }
+    graph_nodes.add(graph_new_nodes);
+
     console.log("end");
     animate(res);
 }
