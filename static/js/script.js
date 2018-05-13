@@ -291,10 +291,11 @@ function set_graph_edges(id) {
             pathLen += edge_len;
         }
 
-        infoContainer = document.getElementById('info');
-        infoContainer.innerHTML = 'Lower_bound: ' + '<b>' + result.nodes[id].tsp_matrix.lower_bound + '</b>' + '<br>';
-        infoContainer.innerHTML += '<b>' + 'Path length:' + '</b>' + pathLen;
     });
+    infoContainer = document.getElementById('info');
+    infoContainer.innerHTML = 'Lower_bound: ' + '<b>' + result.nodes[id].tsp_matrix.lower_bound + '</b>' + '<br>';
+    infoContainer.innerHTML += '<b>' + 'Path length:' + '</b>' + pathLen;
+    graph_network.fit()
 }
 
 function draw() {
@@ -427,6 +428,7 @@ function visualizeVisjs(res) {
     tree_edges.add(tree_new_edges);
     console.log(tree_edges);
     tree_network.fit()
+    graph_network.fit()
 
     for (var i = 0; i < result.nodes[finalNode].tsp_matrix.paths_pool[0].length - 1; i++) {
         graph_new_nodes.push({
