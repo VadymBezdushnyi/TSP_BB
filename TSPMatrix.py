@@ -1,17 +1,10 @@
-import heapq
-import math
 import numpy as np
-import json
 
-from copy import copy, deepcopy
-
-INF = 10000
-BOUND = 1000
-
+INF = 1000000
+MAX_VALUE = 1000
 
 class TSPMatrix:
     def __init__(self, input_matrix):
-        # TODO throw not square
         self.init_size = input_matrix.shape[0]
         self.init_matrix = input_matrix.copy()
         self.matrix = input_matrix.copy()
@@ -67,7 +60,8 @@ class TSPMatrix:
         self.indices[1].remove(jnd)
 
         start_of_new_path, end_of_new_path = [ind], [jnd]
-        # print(self.paths_pool)
+
+        # set back edge to infinity
         for path in self.paths_pool:
             if path[-1] == ind:
                 start_of_new_path = path[:]
@@ -83,8 +77,21 @@ class TSPMatrix:
 
         start_of_new_path.extend(end_of_new_path)
         self.paths_pool.append(start_of_new_path[:])
+
         if self.matrix.shape[0] > 1:
             self.matrix[self.indices[0].index(start_of_new_path[-1])][self.indices[1].index(start_of_new_path[0])] = INF
 
     def exclude_edge(self, ind, jnd):
         self.matrix[self.indices[0].index(ind)][self.indices[1].index(jnd)] = INF
+
+
+    def calc_split_edge(self, tsp_matrix):
+        self.reduce_matrix()
+        self.calc_zero_score()
+
+        indcs = self.indices
+        # find best edge with zero score
+        res = max([(tsp_matrix.zero_score[i][j], indcs[0][i], indcs[1][j])
+                   for i, j in np.ndindex(tsp_matrix.matrix.shape)
+                   if indcs[0][i] != indcs[1][j] and tsp_matrix.matrix[i][j] <= MAX_VALUE])
+        return res[1:]

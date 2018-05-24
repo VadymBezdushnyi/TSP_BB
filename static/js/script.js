@@ -4,7 +4,9 @@ var max_size = 15;
 var data = zero_matrix(max_size, max_size);
 var result;
 var finalNode = 0;
-var INF = 100000;
+
+var INF = 1000 * 1000;
+var MAX_VALUE = 1000;
 
 var color_main_1 = '#FFFFFF';
 var color_main_2 = '#F9F9F9';
@@ -50,7 +52,7 @@ function getId(i, j) {
 function random() {
     for (var i = 0; i < max_size; i++) {
         for (var j = 0; j < max_size; j++) {
-            data[i][j] = Math.floor((Math.random() * 400) + 5);
+            data[i][j] = Math.floor((Math.random() * 40) + 5);
         }
     }
     rebuild_matrix();
@@ -121,10 +123,14 @@ function set_status(ok) {
 }
 
 function sample1() {
-    set_size(4, 4);
+    set_size(5, 5);
     fill(0);
 
-    x = [[INF, 5, 11, 9], [10, INF, 8, 7], [7, 14, INF, 8], [12, 6, 15, INF]];
+    x = [[INF, 2, 3, 4, 1],
+        [2, INF, 2, 3, 7],
+        [3, 3, INF, 3, 2],
+        [3, 3, 2, INF, 2],
+        [2, 2, 1, 2, INF]];
     for (var i = 0; i < height; i++)
         for (var j = 0; j < width; j++)
             data[i][j] = x[i][j];
@@ -132,6 +138,24 @@ function sample1() {
 }
 
 function sample2() {
+    set_size(7, 7);
+    fill(0);
+
+    x = [[0, 3, 93, 13, 33, 9, 57],
+        [4, 0, 77, 42, 21, 16, 34],
+        [45, 17, 0, 36, 16, 28, 25],
+        [39, 90, 80, 0, 56, 7, 91],
+        [28, 46, 88, 33, 0, 25, 57],
+        [3, 88, 18, 46, 92, 0, 7],
+        [44, 26, 33, 27, 84, 39, 0]];
+    for (var i = 0; i < height; i++)
+        for (var j = 0; j < width; j++)
+            data[i][j] = x[i][j];
+    rebuild_matrix();
+}
+
+
+function sample3() {
     set_size(11, 11);
     fill(0);
     x = [[0, 327, 353, 144, 217, 452, 333, 318, 304, 149, 280],
@@ -151,6 +175,7 @@ function sample2() {
     rebuild_matrix();
 }
 
+
 function calculate() {
     set_status(true);
     $("#message").empty().append("Calculation...");
@@ -159,7 +184,9 @@ function calculate() {
         subdata.push(data[i].slice(0, width));
 
     for (var i = 0; i < height; i++)
-        subdata[i][i] = INF
+        for (var j = 0; j < width; j++)
+            subdata[i][j] = ((i === j) ? INF : Math.min(data[i][j], MAX_VALUE));
+
 
     $.getJSON('/calculate', {
         "matrix": subdata,
@@ -339,6 +366,12 @@ function draw() {
             shape: 'circle'
         },
         edges: {
+            arrows: {
+                to: {
+                    enabled: true,
+                    type: 'arrow'
+                }
+            },
             smooth: false
         }
     };
@@ -347,7 +380,7 @@ function draw() {
 
 
 function animate(res) {
-    MAX_TIME = 5000;
+    MAX_TIME = 10000;
     console.log("start animation");
     node_cnt = res.time_entries.length;
     console.log(finalNode)
@@ -355,7 +388,7 @@ function animate(res) {
     for (var i = 0; i < node_cnt; i++) {
         var obj = (res.time_entries[i]);
         // console.log(obj);
-        var timeit = (i + 1) * Math.min(Math.floor(MAX_TIME / node_cnt), 200);
+        var timeit = (i + 1) * Math.min(Math.floor(MAX_TIME / node_cnt), 400);
         // var timeEl = obj;
         setTimeout(function (obj) {
             obj.created.forEach(function (timeEl) {
@@ -363,7 +396,7 @@ function animate(res) {
                 tree_nodes.update({
                     id: timeEl,
                     label: timeEl.toString(),
-                    color: (timeEl % 2 === 1 ? '#66BB99' : '#FF5522')
+                    color: (timeEl % 2 === 1 ? '#33BB33' : '#FF5522')
                 })
             });
             obj.deleted.forEach(function (timeEl) {

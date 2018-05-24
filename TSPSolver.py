@@ -4,13 +4,12 @@ import numpy as np
 import json
 
 from ComplexEncoder import ComplexEncoder
-from TSPMatrix import TSPMatrix
+from TSPMatrix import TSPMatrix, INF
 from BBNode import BBNode
 
 from copy import copy, deepcopy
 
-INF = 10000
-BOUND = 1000
+
 MAXBB_ITERATIONS = 1500000
 
 
@@ -55,20 +54,20 @@ class TSPSolver:
                 path = node.get_path()
                 best_len = self.eval_path(best_path)
                 path_len = self.eval_path(path)
-                node.tsp_matrix.paths_pool[0].append(node.tsp_matrix.paths_pool[0][0]) # TODO
+                node.tsp_matrix.paths_pool[0].append(node.tsp_matrix.paths_pool[0][0])  # TODO
                 if best_len > path_len:
                     best_path = path
                     best_len = path_len
             else:
 
-                split_edge = node.calc_split_edge()
+                split_edge = node.tsp_matrix.calc_split_edge(node.tsp_matrix)
 
                 print(split_edge)
                 print(node.tsp_matrix.matrix)
                 print(node.tsp_matrix.indices)
                 print(node.tsp_matrix.paths_pool)
                 print(node.priority)
-                #print("#" * 40)
+                # print("#" * 40)
 
                 InNode = deepcopy(node).include_node(split_edge)
                 InNode.index = 2 * node.index + 1
