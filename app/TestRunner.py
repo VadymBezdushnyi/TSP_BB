@@ -1,5 +1,5 @@
 import numpy as np
-from TSPSolver import TSPSolver
+from app.TSPSolver import TSPSolver
 
 INF = 10000000
 BOUND = 10000000
