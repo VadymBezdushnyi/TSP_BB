@@ -197,8 +197,8 @@ function calculate() {
         set_status(data.ok);
         if (data.ok) {
             $("#message").empty().append("Visualization...");
-            console.log("result");
-            console.log(result);
+            // console.log("result");
+            // console.log(result);
             visualizeVisjs(data.result);
             $("#message").empty().append(data.message);
             set_status(data.ok);
@@ -309,11 +309,11 @@ function set_graph_edges(id) {
     graph_edges.clear()
 
     var path_pool = result.nodes[id].tsp_matrix.paths_pool
-    console.log("path_pool", path_pool)
+    // console.log("path_pool", path_pool)
     var pathLen = 0;
     path_pool.forEach(function (path) {
         for (var i = 0; i + 1 < path.length; i++) {
-            console.log(path[i]);
+            // console.log(path[i]);
             var edge_len = result.nodes[1].tsp_matrix.init_matrix[path[i]][path[i + 1]]
             graph_edges.add({
                 id: path[i],
@@ -351,13 +351,13 @@ function draw() {
     tree_network.on('click', function (properties) {
         var ids = properties.nodes;
         var clickedNode = tree_nodes.get(ids)[0];
-        console.log(result.nodes[3])
+        // console.log(result.nodes[3])
         if (clickedNode !== undefined) {
             set_graph_edges(clickedNode.id)
         }
     });
 
-    console.log('drawing graph')
+    // console.log('drawing graph')
 
     graph_nodes = new vis.DataSet();
     graph_edges = new vis.DataSet();
@@ -387,13 +387,13 @@ function draw() {
 
 function animate(res) {
     MAX_TIME = 10000;
-    console.log("start animation");
+    // console.log("start animation");
     node_cnt = res.time_entries.length;
-    console.log(finalNode)
+    // console.log(finalNode)
     set_graph_edges(finalNode)
     for (var i = 0; i < node_cnt; i++) {
         var obj = (res.time_entries[i]);
-        // console.log(obj);
+        // // console.log(obj);
         var timeit = (i + 1) * Math.min(Math.floor(MAX_TIME / node_cnt), 400);
         // var timeEl = obj;
         timeouts.push(
@@ -413,7 +413,7 @@ function animate(res) {
                         label: timeEl.toString(),
                         color: (timeEl % 2 === 1 ? '#559988' : '#995522')
                     });
-                    // console.log("animation: " + timeit)
+                    // // console.log("animation: " + timeit)
                 });
 
                 obj.final.forEach(function (timeEl) {
@@ -423,14 +423,14 @@ function animate(res) {
                         label: timeEl.toString(),
                         color: '#00FF00'
                     });
-                    // console.log("animation: " + timeit)
+                    // // console.log("animation: " + timeit)
                 });
 
 
             }, timeit, obj)
         );
     }
-    console.log("end animation")
+    // console.log("end animation")
 
 }
 
@@ -444,16 +444,16 @@ function visualizeVisjs(res) {
     //quick reset of the timer array you just cleared
     timeouts = [];
 
-    console.log(res);
+    // console.log(res);
     var tree_new_nodes = []
     var tree_new_edges = []
 
     var graph_new_nodes = []
-    console.log(res.order)
+    // console.log(res.order)
 
     for (var i = 0; i < res.time_entries.length; i++) {
         var obj = res.time_entries[i];
-        // console.log(obj);
+        // // console.log(obj);
         obj.created.forEach(function (el) {
 
             tree_new_nodes.push({
@@ -475,7 +475,7 @@ function visualizeVisjs(res) {
     }
     tree_nodes.add(tree_new_nodes);
     tree_edges.add(tree_new_edges);
-    console.log(tree_edges);
+    // console.log(tree_edges);
     tree_network.fit()
     graph_network.fit()
 
@@ -487,7 +487,7 @@ function visualizeVisjs(res) {
     }
     graph_nodes.add(graph_new_nodes);
 
-    console.log("end");
+    // console.log("end");
     animate(res);
 }
 

@@ -23,7 +23,6 @@ def calculate():
     except:
         return jsonify(message="Something went wrong :(", ok=False)
     return json.dumps(dict(result=json_result, message="OK", ok=True), cls=ComplexEncoder)
-    # return jsonify(matrix=[[(x) for x in v] for v in j], message="Successfully calculated!", ok=True)
 
 
 if __name__ == '__main__':

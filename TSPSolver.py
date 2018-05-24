@@ -62,12 +62,12 @@ class TSPSolver:
 
                 split_edge = node.tsp_matrix.calc_split_edge(node.tsp_matrix)
 
-                print(split_edge)
-                print(node.tsp_matrix.matrix)
-                print(node.tsp_matrix.indices)
-                print(node.tsp_matrix.paths_pool)
-                print(node.priority)
-                # print("#" * 40)
+                # print(split_edge)
+                # print(node.tsp_matrix.matrix)
+                # print(node.tsp_matrix.indices)
+                # print(node.tsp_matrix.paths_pool)
+                # print(node.priority)
+                # # print("#" * 40)
 
                 InNode = deepcopy(node).include_node(split_edge)
                 InNode.index = 2 * node.index + 1
@@ -86,8 +86,8 @@ class TSPSolver:
 
                 iteration += 1
         # print(json_objects)
-        print(iteration)
-        print(best_path, self.eval_path(best_path))
+        # print(iteration)
+        # print(best_path, self.eval_path(best_path))
         return dict(nodes=json_objects,
                     time_entries=time_entries,
                     order=order,
