@@ -2,8 +2,8 @@ import numpy as np
 from flask import Flask, render_template, request, jsonify
 import json
 
-from ComplexEncoder import ComplexEncoder
-from TSPSolver import TSPSolver
+from app.ComplexEncoder import ComplexEncoder
+from app.TSPSolver import TSPSolver
 
 app = Flask(__name__)
 

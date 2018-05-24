@@ -1,5 +1,7 @@
-Travelling salesman problem solution with branch and bound method  
+Travelling salesman problem solution with branch and bound method
+
 * Flask server
-* numpy for fast computing
-* visualization via vis.js 
+* numpy for fast matrix computing
+* visualization via vis.js  
+
 View demo here: https://tsppy.herokuapp.com/
