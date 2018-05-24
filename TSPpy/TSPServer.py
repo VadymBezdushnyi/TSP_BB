@@ -1,10 +1,12 @@
 import numpy as np
-from flask import Flask, render_template, request, jsonify
 import json
-app = Flask(__name__)
+from flask import Flask, render_template, request, jsonify
+
 
 from TSPpy.ComplexEncoder import ComplexEncoder
 from TSPpy.TSPSolver import TSPSolver
+from TSPpy import app
+
 
 @app.route('/')
 def index():

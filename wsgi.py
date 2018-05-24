@@ -1,5 +1,4 @@
 from TSPpy import app
 
-if __name__ == '__main__':
-    print('meh')
+if __name__ == "__main__":
     app.run()
