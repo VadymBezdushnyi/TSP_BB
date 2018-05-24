@@ -1,15 +1,14 @@
 import numpy as np
 from flask import Flask, render_template, request, jsonify
 import json
-
-from ComplexEncoder import ComplexEncoder
-from TSPSolver import TSPSolver
-
 app = Flask(__name__)
 
+from TSPpy.ComplexEncoder import ComplexEncoder
+from TSPpy.TSPSolver import TSPSolver
 
 @app.route('/')
 def index():
+    print('keh')
     return render_template('index.html')
 
 
@@ -26,4 +25,5 @@ def calculate():
 
 
 if __name__ == '__main__':
+    print('qweeh')
     app.run(port=7321)

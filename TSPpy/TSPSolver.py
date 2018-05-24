@@ -1,7 +1,7 @@
 import heapq
 
-from TSPMatrix import TSPMatrix, INF
-from BBNode import BBNode
+from TSPpy.TSPMatrix import TSPMatrix, INF
+from TSPpy.BBNode import BBNode
 
 from copy import deepcopy
 
