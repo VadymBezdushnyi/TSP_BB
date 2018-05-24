@@ -13,6 +13,8 @@ var color_main_2 = '#F9F9F9';
 var color_disabled = '#EEEEEE';
 var color_special = '#BBFF99';
 
+var timeouts = [];
+
 var colorizer = function (i, j) {
     return (i < height && j < width ? ((i + j) % 2 == 0 ? color_main_1 : color_main_2) : color_disabled);
 };
@@ -84,7 +86,6 @@ function rebuild_matrix() {
         }
         content += '</tr>';
     }
-
     $('#input-matrix').empty().append(content);
     $("#input-matrix").on('mouseup', '.matrix-cell', function () {
         $(this).select();
@@ -124,7 +125,7 @@ function set_status(ok) {
 
 function sample1() {
     set_size(5, 5);
-    fill(0);
+    random();
 
     x = [[INF, 2, 3, 4, 1],
         [2, INF, 2, 3, 7],
@@ -139,8 +140,7 @@ function sample1() {
 
 function sample2() {
     set_size(7, 7);
-    fill(0);
-
+    random();
     x = [[0, 3, 93, 13, 33, 9, 57],
         [4, 0, 77, 42, 21, 16, 34],
         [45, 17, 0, 36, 16, 28, 25],
@@ -157,7 +157,7 @@ function sample2() {
 
 function sample3() {
     set_size(11, 11);
-    fill(0);
+    random();
     x = [[0, 327, 353, 144, 217, 452, 333, 318, 304, 149, 280],
         [327, 0, 243, 183, 376, 174, 90, 158, 403, 251, 56],
         [353, 243, 0, 263, 245, 190, 155, 85, 217, 205, 206],
@@ -194,12 +194,18 @@ function calculate() {
         "height": height
     }, function (data) {
         result = data.result;
-        $("#message").empty().append("Visualization...");
-        console.log("result");
-        console.log(result);
-        visualizeVisjs(data.result);
-        $("#message").empty().append(data.message);
         set_status(data.ok);
+        if (data.ok) {
+            $("#message").empty().append("Visualization...");
+            console.log("result");
+            console.log(result);
+            visualizeVisjs(data.result);
+            $("#message").empty().append(data.message);
+            set_status(data.ok);
+        } else {
+            $("#message").empty().append(data.message);
+        }
+
     });
 }
 
@@ -390,37 +396,39 @@ function animate(res) {
         // console.log(obj);
         var timeit = (i + 1) * Math.min(Math.floor(MAX_TIME / node_cnt), 400);
         // var timeEl = obj;
-        setTimeout(function (obj) {
-            obj.created.forEach(function (timeEl) {
+        timeouts.push(
+            setTimeout(function (obj) {
+                obj.created.forEach(function (timeEl) {
 
-                tree_nodes.update({
-                    id: timeEl,
-                    label: timeEl.toString(),
-                    color: (timeEl % 2 === 1 ? '#33BB33' : '#FF5522')
-                })
-            });
-            obj.deleted.forEach(function (timeEl) {
-
-                tree_nodes.update({
-                    id: timeEl,
-                    label: timeEl.toString(),
-                    color: (timeEl % 2 === 1 ? '#559988' : '#995522')
+                    tree_nodes.update({
+                        id: timeEl,
+                        label: timeEl.toString(),
+                        color: (timeEl % 2 === 1 ? '#33BB33' : '#FF5522')
+                    })
                 });
-                // console.log("animation: " + timeit)
-            });
+                obj.deleted.forEach(function (timeEl) {
 
-            obj.final.forEach(function (timeEl) {
-                finalNode = timeEl
-                tree_nodes.update({
-                    id: timeEl,
-                    label: timeEl.toString(),
-                    color: '#00FF00'
+                    tree_nodes.update({
+                        id: timeEl,
+                        label: timeEl.toString(),
+                        color: (timeEl % 2 === 1 ? '#559988' : '#995522')
+                    });
+                    // console.log("animation: " + timeit)
                 });
-                // console.log("animation: " + timeit)
-            });
+
+                obj.final.forEach(function (timeEl) {
+                    finalNode = timeEl
+                    tree_nodes.update({
+                        id: timeEl,
+                        label: timeEl.toString(),
+                        color: '#00FF00'
+                    });
+                    // console.log("animation: " + timeit)
+                });
 
 
-        }, timeit, obj);
+            }, timeit, obj)
+        );
     }
     console.log("end animation")
 
@@ -428,6 +436,14 @@ function animate(res) {
 
 function visualizeVisjs(res) {
     draw();
+
+
+    for (var i = 0; i < timeouts.length; i++) {
+        clearTimeout(timeouts[i]);
+    }
+    //quick reset of the timer array you just cleared
+    timeouts = [];
+
     console.log(res);
     var tree_new_nodes = []
     var tree_new_edges = []
