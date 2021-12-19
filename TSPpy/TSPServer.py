@@ -1,5 +1,6 @@
 import numpy as np
 import json
+import os
 from flask import Flask, render_template, request, jsonify
 
 from TSPpy.ComplexEncoder import ComplexEncoder
@@ -24,4 +25,5 @@ def calculate():
 
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(port=port)
