@@ -16,15 +16,15 @@
         <div class="header" id="calculator-name">Travelling salesman problem</div>
         <div class="rowbutton">
             <div class="control" id="size-square">
-                <button class="white-button subcontrol" onclick="change_size(-1,-1)">-</button>
+                <button class="white-button subcontrol" id="decrement_size" onclick="change_size(-1,-1)">-</button>
                 <div id="size" class="subcontrol">3x3</div>
-                <button class="white-button subcontrol" onclick="change_size(+1,+1)">+</button>
+                <button class="white-button subcontrol" id="increment_size" onclick="change_size(+1,+1)">+</button>
             </div>
             <button class="white-button control" onclick="sample1()">Sample #1</button>
             <button class="white-button control" onclick="sample2()">Sample #2</button>
             <button class="white-button control" onclick="sample3()">Sample #3</button>
             <button class="white-button control" onclick="random()">Random</button>
-            <button class="red-button control" onclick="calculate('/calculate_inverse')">Calculate</button>
+            <button class="red-button control" id="calculate" onclick="calculate()">Calculate</button>
             <div id = "message">
 
             </div>

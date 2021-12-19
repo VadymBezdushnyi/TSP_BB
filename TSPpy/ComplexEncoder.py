@@ -7,6 +7,8 @@ class ComplexEncoder(json.JSONEncoder):
             return obj.tolist()
         elif isinstance(obj, numpy.int64):
             return int(obj)
+        elif isinstance(obj, numpy.int32):
+            return int(obj)
         elif hasattr(obj,'repr_json'):
             return obj.repr_json()
         else:
