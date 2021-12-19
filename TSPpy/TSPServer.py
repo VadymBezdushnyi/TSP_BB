@@ -6,33 +6,28 @@ from flask import Flask, render_template, request, jsonify
 from TSPpy.ComplexEncoder import ComplexEncoder
 from TSPpy.TSPSolver import TSPSolver
 from TSPpy import app
-
-import flask_profiler
-
-app.config["flask_profiler"] = {
-    "enabled": True,
-    "storage": {
-        "engine": "sqlite"
-    },
-    "basicAuth":{
-        "enabled": True,
-        "username": "admin",
-        "password": "admin"
-    },
-    "ignore": [
-	    "^/static/.*"
-	]
-}
+#
+# app.config["flask_profiler"] = {
+#     "enabled": True,
+#     "storage": {
+#         "engine": "sqlite"
+#     },
+#     "basicAuth":{
+#         "enabled": True,
+#         "username": "admin",
+#         "password": "admin"
+#     },
+#     "ignore": [
+# 	    "^/static/.*"
+# 	]
+# }
 
 @app.route('/')
 def index():
     print('keh')
     return render_template('index.html')
 
-flask_profiler.init_app(app)
-
 @app.route('/calculate')
-@flask_profiler.profile()
 def calculate():
     try:
         size = request.args.get('width', 1, type=int)

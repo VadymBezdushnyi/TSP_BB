@@ -1,7 +1,8 @@
-click==6.7
-Flask==1.0.2
-gunicorn==19.8.1
-itsdangerous==0.24
-Jinja2==2.10
-numpy==1.14.3
-Werkzeug==0.14.1
+click==8.0.3
+Flask==2.0.2
+gunicorn==20.1.0
+itsdangerous==2.0.1
+Jinja2==3.0.3
+numpy==1.21.4
+Werkzeug==2.0.2
+selenium==4.1.0
