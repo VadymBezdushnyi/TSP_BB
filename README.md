@@ -3,11 +3,8 @@
 # Description
 ## Algorithm
 
-Algorithm accepts weight matrix NxN and finds path which visits all nodes and has minimal total weight
-Given some matrix, for each edge(cell) we can calculate "zero-score"
-On each step we:
-- given 
-- find some edge which will be deleted using
+Algorithm accepts weight matrix NxN and finds path which visits all nodes and has minimal total weight.
+For detailed explanation please visit https://www.geeksforgeeks.org/traveling-salesman-problem-using-branch-and-bound-2/
 For visualization purposes not only optimal, but all matrices are saved.
 Algorithm is implemented inside TSPMatrix.py and TSPSolver.py classes 
 For matrix operations numpy is used, however algorithm is relatively slow, because every step is saved for visualization
