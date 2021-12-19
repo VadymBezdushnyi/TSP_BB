@@ -5,9 +5,7 @@ from TSPpy.BBNode import BBNode
 
 from copy import deepcopy
 
-
 MAXBB_ITERATIONS = 1500000
-
 
 class TSPSolver:
     def __init__(self, m):
@@ -37,7 +35,6 @@ class TSPSolver:
         time_entries = [dict(created=[1], final=[], deleted=[])]
         order = []
         while len(self.nodes_pool) > 0 and iteration < MAXBB_ITERATIONS:
-
             node = heapq.heappop(self.nodes_pool)
             order.append(node.index)
             if node.priority >= best_len:
@@ -55,15 +52,7 @@ class TSPSolver:
                     best_path = path
                     best_len = path_len
             else:
-
                 split_edge = node.tsp_matrix.calc_split_edge(node.tsp_matrix)
-
-                # print(split_edge)
-                # print(node.tsp_matrix.matrix)
-                # print(node.tsp_matrix.indices)
-                # print(node.tsp_matrix.paths_pool)
-                # print(node.priority)
-                # # print("#" * 40)
 
                 InNode = deepcopy(node).include_node(split_edge)
                 InNode.index = 2 * node.index + 1
@@ -81,9 +70,7 @@ class TSPSolver:
                                          deleted=[node.index]))
 
                 iteration += 1
-        # print(json_objects)
-        # print(iteration)
-        # print(best_path, self.eval_path(best_path))
+
         return dict(nodes=json_objects,
                     time_entries=time_entries,
                     order=order,

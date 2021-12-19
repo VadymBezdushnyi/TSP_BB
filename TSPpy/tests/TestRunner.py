@@ -30,9 +30,9 @@ def run():
                   [1, 0, 0, 10000, 2, 0],
                   [0, 0, 0, 0, 10000, 1],
                   [0, 0, 0, 0, 0, 10000], ])
-    with open('tests/42.txt') as f:
+
+    with open('42.txt') as f:
         d = readTest(f)
         print(d)
-
 
     TSPSolver(d).run()

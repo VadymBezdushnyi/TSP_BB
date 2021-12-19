@@ -2,29 +2,12 @@ import numpy as np
 import json
 from flask import Flask, render_template, request, jsonify
 
-
 from TSPpy.ComplexEncoder import ComplexEncoder
 from TSPpy.TSPSolver import TSPSolver
 from TSPpy import app
-#
-# app.config["flask_profiler"] = {
-#     "enabled": True,
-#     "storage": {
-#         "engine": "sqlite"
-#     },
-#     "basicAuth":{
-#         "enabled": True,
-#         "username": "admin",
-#         "password": "admin"
-#     },
-#     "ignore": [
-# 	    "^/static/.*"
-# 	]
-# }
 
 @app.route('/')
 def index():
-    print('keh')
     return render_template('index.html')
 
 @app.route('/calculate')
@@ -41,5 +24,4 @@ def calculate():
 
 
 if __name__ == '__main__':
-    print('qweeh')
-    app.run(port=7321)
+    app.run(port=5000)

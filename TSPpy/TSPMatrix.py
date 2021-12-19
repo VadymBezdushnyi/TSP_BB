@@ -52,7 +52,6 @@ class TSPMatrix:
                 self.zero_score[i][j] = min_in_row + min_in_col
 
     def include_edge(self, ind, jnd):
-
         self.matrix = np.delete(self.matrix, self.indices[0].index(ind), 0)
         self.matrix = np.delete(self.matrix, self.indices[1].index(jnd), 1)
 

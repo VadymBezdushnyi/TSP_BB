@@ -1,5 +1,4 @@
 class BBNode:
-
     def __init__(self, tsp_matrix, index):
         self.tsp_matrix = tsp_matrix
         self.index = index
