@@ -22,8 +22,3 @@ def calculate():
     except:
         return jsonify(message="Something went wrong :(", ok=False)
     return json.dumps(dict(result=json_result, message="OK", ok=True), cls=ComplexEncoder)
-
-
-if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(port=port)
