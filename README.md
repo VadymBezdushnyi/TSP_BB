@@ -3,24 +3,24 @@
 # Description
 ## Algorithm
 
-Algorithm accepts weight matrix NxN and finds path which visits all nodes and has minimal total weight.
-For detailed explanation please visit https://www.geeksforgeeks.org/traveling-salesman-problem-using-branch-and-bound-2/
-For visualization purposes not only optimal, but all matrices are saved.
-Algorithm is implemented inside TSPMatrix.py and TSPSolver.py classes 
-For matrix operations numpy is used, however algorithm is relatively slow, because every step is saved for visualization
+Algorithm accepts weight matrix NxN and finds path which visits all nodes and has minimal total weight.  
+For detailed explanation please visit https://www.geeksforgeeks.org/traveling-salesman-problem-using-branch-and-bound-2/   
+Algorithm is implemented inside `TSPMatrix.py` and `TSPSolver.py` classes    
 
-Algorithm has some low-level development testing which can be found in `TestRunner.py`(never runs on cloud)
+Algorithm has some low-level development testing which can be found in `TestRunner.py`(never runs on cloud)  
 
-## Website
-Simple Flask app is created, app has only two endpoints : `/` for web-page and `/calculate` for matrix calculation
-Explore `TSPServer.py` for more details.
+## Website  
+Simple Flask app is created, app has only two endpoints : `/` for web-page and `/calculate` for matrix calculation  
+Explore `TSPServer.py` for more details.  
 
 ## Interface & Visalization
 
-Web page has simple structure with 3 components:
-- Matrix input with test samples
-- Solution visualization
-- Solver animation
+![img_1.png](img_1.png)
+
+Web page has simple structure with 3 components:  
+- Matrix input with test samples  
+- Solution visualization  
+- Solver animation  
 
 Frontend is located inside `static/` and `templates/` folders
 
@@ -55,10 +55,10 @@ Deployment to Heroku can be done in may different ways.
 Previously(in 2018) Heroku specific settings were used. On each commit heroku checks commit and deploys it. 
 No docker involved.
 
-Now, I tried to use docker.
-With docker I have an option:
-- use github actions to push build image to Heroku
-- Heroku checks each commit and uses Dockerfile to build website without github actions
+Now, I use Docker.
+With Docker, I have an option:
+- use GitHub actions to push built image to Heroku
+- Heroku checks each commit and uses Dockerfile to build website without GitHub actions
 
 Second case worked better, but I believe first one should also work.
 
