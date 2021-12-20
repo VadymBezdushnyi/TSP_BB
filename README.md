@@ -48,5 +48,10 @@ Each commit to master creates new docker image.
 Visit `.github/workflows` to explore more details.  
 
 ## Using Demo on Heroku
-
 View demo here: https://tsppy.herokuapp.com/
+
+Deployment to Heroku can be done in may different ways.
+Previously(in 2018) Heroku specific settings were used. On each commit heroku checks commit and deploys it. 
+No docker involved.
+
+Now, I tried to use docker, there is github action   
